@@ -15,17 +15,17 @@ Add a dependency on this package and create a `NpgsqlDataSource`. Once this is d
 
 
 ```csharp
-NpgsqlDataSourceBuilder builder = new NpgsqlDataSourceBuilder("Host=localhost;Username=postgres;Password=root;Database=postgres");
+NpgsqlDataSourceBuilder builder = new
+NpgsqlDataSourceBuilder
+("Host=localhost;Username=postgres;Password=root;Database=postgres");
 
 builder.UseTvp();
 
-NpgsqlDataSource dataSource = builder.Build();
+// Connect..
 
-NpgsqlConnection connection = dataSource.CreateConnection();
-
-await connection.OpenAsync();
-
-DataTable dt = new DataTable("schema.compositeType");
+DataTable dt = new
+DataTable
+("schema.compositeType");
 
 dt.Columns.Add(new DataColumn("Column1"));
 dt.Columns.Add(new DataColumn("Column2"));
@@ -35,12 +35,13 @@ dt.Rows.Add("Column1_value", "Column2_value", "Column3_value");
 dt.Rows.Add("Column1_value", "Column2_value", "Column3_value");
 dt.Rows.Add("Column1_value", "Column2_value", "Column3_value");
 
-using (NpgsqlCommand cmd = new NpgsqlCommand($"CALL schema.storedProcedure(@{ nameof(dt) })", connection))
-{
-    cmd.Parameters.Add(new NpgsqlParameter(nameof(dt), dt));
+NpgsqlCommand cmd = new
+NpgsqlCommand
+("schema.storedProcedure", connection);
 
-    await cmd.ExecuteNonQueryAsync();
-}
+cmd.Parameters.Add(new NpgsqlParameter(nameof(dt), dt));
+
+// Set command type and execute..
 ```
 
 
@@ -50,10 +51,22 @@ The plugin processes the parameter as an array of a composite type that was prev
 
 
 ```sql
-CREATE PROCEDURE schema.storedProcedure(IN params schema.compositeType[])
+CREATE PROCEDURE schema.storedProcedure(IN dt schema.compositeType[])
 ```
 
 
 
 > [!NOTE]
-> Specifying types via [NpgsqlParameter.DataTypeName](https://www.npgsql.org/doc/api/Npgsql.NpgsqlParameter.html#Npgsql_NpgsqlParameter_DataTypeName) is not supported. For `DataTable`, the [TableName](https://learn.microsoft.com/ru-ru/dotnet/api/system.data.datatable.tablename?view=net-10.0) property is used; for `DbDataReader`, the [GetSchemaTable](https://learn.microsoft.com/en-us/dotnet/api/system.data.datatablereader.getschematable?view=net-10.0) method must be implemented.
+> Specifying types using [NpgsqlParameter.DataTypeName](https://www.npgsql.org/doc/api/Npgsql.NpgsqlParameter.html#Npgsql_NpgsqlParameter_DataTypeName) is not supported.
+
+
+
+## DataTable
+
+Use [TableName](https://learn.microsoft.com/en-us/dotnet/api/system.data.datatable.tablename?view=net-10.0) property.
+
+
+
+## DbDataReader
+
+Use [GetSchemaTable](https://learn.microsoft.com/en-us/dotnet/api/system.data.idatareader.getschematable?view=net-10.0) method. The table must include a column named [BaseTableName](https://learn.microsoft.com/en-us/dotnet/api/system.data.common.schematablecolumn.basetablename?view=net-10.0).
