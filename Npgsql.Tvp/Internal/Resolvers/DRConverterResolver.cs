@@ -6,11 +6,11 @@ using Npgsql.Tvp.Internal.Converters.Models;
 
 using Npgsql.Tvp.Internal.Resolvers.Abstracts;
 
-using System.Data.Common;
+using System.Data;
 
 namespace Npgsql.Tvp.Internal.Resolvers
 {
-    internal sealed class DRConverterResolver(PgSerializerOptions options) : AbstractConverterResolver<DbDataReader>
+    internal sealed class DRConverterResolver(PgSerializerOptions options) : AbstractConverterResolver<IDataReader>
     {
         private readonly
             DRConverter _converter = new
@@ -18,7 +18,7 @@ namespace Npgsql.Tvp.Internal.Resolvers
             (options);
 
         /// <inheritdoc/>
-        protected override PgTypeId GetArrayType(DbDataReader value)
+        protected override PgTypeId GetArrayType(IDataReader value)
         {
             return value.GetArrayType(options);
         }

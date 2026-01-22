@@ -14,7 +14,7 @@ namespace Npgsql.Tvp.Internal.Converters
         /// <inheritdoc/>
         protected override IParameter GetParameter(DataTable value)
         {
-            return new ParameterDT(value, value.GetArrayType(options).Oid.Value, options);
+            return new ParameterDR(new DataTableReader(value), value.GetArrayType(options).Oid.Value, value.Rows.Count, options);
         }
     }
 }

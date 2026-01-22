@@ -2,11 +2,11 @@
 
 using Npgsql.Tvp.Internal.Converters.Models.Abstracts;
 
-using System.Data.Common;
+using System.Data;
 
 namespace Npgsql.Tvp.Internal.Converters.Models
 {
-    internal sealed class ParameterDR(DbDataReader value, uint oid, PgSerializerOptions options) : AbstractParameter(value.FieldCount, 32, oid, options)
+    internal sealed class ParameterDR(IDataReader value, uint oid, int rowsCount, PgSerializerOptions options) : AbstractParameter(value.FieldCount, rowsCount, oid, options)
     {
         /// <inheritdoc/>
         protected override void FillBuffer()
@@ -19,5 +19,8 @@ namespace Npgsql.Tvp.Internal.Converters.Models
                 }
             }
         }
+
+        public ParameterDR(IDataReader value, uint oid, PgSerializerOptions options) : this(value, oid, 32, options)
+        { }
     }
 }

@@ -10,7 +10,7 @@ The plugin was created to emulate table-valued parameters ([supported](https://l
 
 # Usage
 
-Add a dependency on this package and create a `NpgsqlDataSource`. Once this is done, you can use `DataTable` and `DbDataReader` types when interacting with PostgreSQL:
+Add a dependency on this package and create a `NpgsqlDataSource`. Once this is done, you can use `DataTable` and `IDataReader` types when interacting with PostgreSQL:
 
 
 
@@ -67,6 +67,6 @@ Use [TableName](https://learn.microsoft.com/en-us/dotnet/api/system.data.datatab
 
 
 
-## DbDataReader
+## IDataReader
 
 Use [GetSchemaTable](https://learn.microsoft.com/en-us/dotnet/api/system.data.idatareader.getschematable?view=net-10.0) method. The table must include a column named [BaseTableName](https://learn.microsoft.com/en-us/dotnet/api/system.data.common.schematablecolumn.basetablename?view=net-10.0).

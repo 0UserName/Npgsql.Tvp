@@ -3,7 +3,6 @@ using Npgsql.Internal.Postgres;
 
 using System;
 using System.Data;
-using System.Data.Common;
 
 namespace Npgsql.Tvp.Internal.Resolvers
 {
@@ -17,7 +16,7 @@ namespace Npgsql.Tvp.Internal.Resolvers
         /// <inheritdoc/>
         public PgTypeInfo? GetTypeInfo(Type? type, DataTypeName? dataTypeName, PgSerializerOptions options)
         {
-            return type != default ? TryGet<DataTable, DTConverterResolver>(type, options) ?? TryGet<DbDataReader, DRConverterResolver>(type, options) : default;
+            return type != default ? TryGet<DataTable, DTConverterResolver>(type, options) ?? TryGet<IDataReader, DRConverterResolver>(type, options) : default;
         }
     }
 }

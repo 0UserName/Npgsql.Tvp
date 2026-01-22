@@ -32,7 +32,7 @@ namespace Npgsql.Tvp.Internal.Converters.Models
         /// <remarks>
         /// Relies on <see cref="IDataReader.GetSchemaTable()"/>.
         /// </remarks>
-        private static string GetDataTypeName(this DbDataReader reader)
+        private static string GetDataTypeName(this IDataReader reader)
         {
             return reader.GetSchemaTable().GetDataTypeName();
         }
@@ -44,7 +44,7 @@ namespace Npgsql.Tvp.Internal.Converters.Models
         }
 
         /// <inheritdoc cref="GetArrayDataType(string, PgSerializerOptions)"/>
-        public static PgTypeId GetArrayType(this DbDataReader reader, PgSerializerOptions options)
+        public static PgTypeId GetArrayType(this IDataReader reader, PgSerializerOptions options)
         {
             return GetArrayDataType(reader.GetDataTypeName(), options);
         }
