@@ -8,7 +8,7 @@ namespace Npgsql.Tvp.Internal.Resolvers
 {
     internal sealed class TypeInfoResolver : IPgTypeInfoResolver
     {
-        private static PgResolverTypeInfo TryGet<TParameter, TResolver>(Type type, PgSerializerOptions options) where TResolver : PgConverterResolver
+        private static PgResolverTypeInfo TryGetResolver<TParameter, TResolver>(Type type, PgSerializerOptions options) where TResolver : PgConverterResolver
         {
             return type.IsAssignableTo(typeof(TParameter)) ? new PgResolverTypeInfo(options, (TResolver)Activator.CreateInstance(typeof(TResolver), options), default, type) : default;
         }
@@ -16,7 +16,7 @@ namespace Npgsql.Tvp.Internal.Resolvers
         /// <inheritdoc/>
         public PgTypeInfo? GetTypeInfo(Type? type, DataTypeName? dataTypeName, PgSerializerOptions options)
         {
-            return type != default ? TryGet<DataTable, DTConverterResolver>(type, options) ?? TryGet<IDataReader, DRConverterResolver>(type, options) : default;
+            return type == default ? default : TryGetResolver<DataTable, DataTableConverterResolver>(type, options) ?? TryGetResolver<IDataReader, DataReaderConverterResolver>(type, options);
         }
     }
 }

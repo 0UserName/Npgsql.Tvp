@@ -1,21 +1,23 @@
-﻿using System;
+﻿using Npgsql.Tvp.Internal.Converters.Binders;
 
-namespace Npgsql.Tvp.Internal.Converters.Models.Contracts
+using System;
+
+namespace Npgsql.Tvp.Internal.Converters.Parameters.Contracts
 {
     internal interface IParameter : IDisposable
     {
-        int ColumnsCount
+        int Columns
         {
             get;
         }
 
-        int RowsCount
+        int Rows
         {
             get;
         }
 
         /// <summary>
-        /// Size of the parameter headers.
+        /// Gets the size of the parameter headers.
         /// </summary>
         /// 
         /// <remarks>
@@ -27,7 +29,7 @@ namespace Npgsql.Tvp.Internal.Converters.Models.Contracts
         }
 
         /// <summary>
-        /// Unique id identifying the data type in a given database (in pg_type).
+        /// Gets the unique id identifying the data type in a given database (in pg_type).
         /// </summary>
         uint OID
         {
@@ -43,15 +45,10 @@ namespace Npgsql.Tvp.Internal.Converters.Models.Contracts
         }
 
         /// <summary>
-        /// Gets the value at 
-        /// the specified row 
-        /// and column.
+        /// Calculates the total parameter size.
         /// </summary>
-        Value this[int row, int column]
-        {
-            get;
-        }
+        int CalculateSize();
 
-        int GetSize();
+        ref Writable GetMoveNext();
     }
 }

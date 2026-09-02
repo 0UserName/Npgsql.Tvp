@@ -1,4 +1,4 @@
-﻿namespace Npgsql.Tvp.Internal.Converters.Models
+﻿namespace Npgsql.Tvp.Internal.Converters
 {
     internal static class Constants
     {
